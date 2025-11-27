@@ -2,35 +2,35 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-model_3day = joblib.load("model_lgb_3day.pkl")
-# model_1week = joblib.load("model_lgb_1week.pkl")
-feature_columns = [
-   'cc_type', 'years_of_experience', 'total_complaints',
-   'maidspeaks_amharic', 'maidspeaks_arabic', 'maidspeaks_english',
-   'maidspeaks_french', 'maidspeaks_oromo', 'num_languages',
-   'maid_cooking_khaleeji', 'maid_cooking_lebanese', 'maid_cooking_international',
-   'maid_cooking_not_specified', 'maid_nat_ethiopian', 'maid_nat_indian',
-   'maid_nat_west_african', 'client_household_baby', 'client_household_many_kids',
-   'client_special_elderly', 'client_special_special_needs',
-   'client_pet_cat', 'client_pet_dog', 'clientpref_filipina', 'clientpref_ethiopian_maid',
-   'clientpref_west_african_nationality', 'clientpref_indian','client_dayoff_flexible', 'client_dayoff_work_for_pay',
-   'client_dayoff_stay_home_for_pay',
-   'client_living_private_room', 'client_living_live_out',
-   'client_living_abu_dhabi', 'client_cuisine_lebanese',
-   'client_cuisine_khaleeji', 'client_cuisine_international',
-   'maid_household_refuses_baby', 'maid_household_refuses_many_kids',
-   'maid_pet_refuses_cat', 'maid_pet_refuses_dog',
-   'maid_dayoff_refuses_fixed_sunday',
-   'maid_living_requires_private_room', 'maid_living_refuses_abu_dhabi',
-   'maidpref_edu_school', 'maidpref_edu_university',
-   'maidpref_kids_exp_lessthan2', 'maidpref_kids_exp_above2',
-   'maidpref_pet_cats', 'maidpref_pet_dogs',
-   'maidpref_pers_energetic', 'maidpref_pers_no_attitude',
-   'maidpref_pers_no_tiktok', 'maidpref_pers_veg_friendly',
-   'maidpref_travel_travel', 'maidpref_travel_relocate',
-   'maidpref_non_smoker',
-   'maidpref_care_elderly_experienced', 'maidpref_care_special_needs'
-]
+# model_3day = joblib.load("model_lgb_3day.pkl")
+# # model_1week = joblib.load("model_lgb_1week.pkl")
+# feature_columns = [
+#    'cc_type', 'years_of_experience', 'total_complaints',
+#    'maidspeaks_amharic', 'maidspeaks_arabic', 'maidspeaks_english',
+#    'maidspeaks_french', 'maidspeaks_oromo', 'num_languages',
+#    'maid_cooking_khaleeji', 'maid_cooking_lebanese', 'maid_cooking_international',
+#    'maid_cooking_not_specified', 'maid_nat_ethiopian', 'maid_nat_indian',
+#    'maid_nat_west_african', 'client_household_baby', 'client_household_many_kids',
+#    'client_special_elderly', 'client_special_special_needs',
+#    'client_pet_cat', 'client_pet_dog', 'clientpref_filipina', 'clientpref_ethiopian_maid',
+#    'clientpref_west_african_nationality', 'clientpref_indian','client_dayoff_flexible', 'client_dayoff_work_for_pay',
+#    'client_dayoff_stay_home_for_pay',
+#    'client_living_private_room', 'client_living_live_out',
+#    'client_living_abu_dhabi', 'client_cuisine_lebanese',
+#    'client_cuisine_khaleeji', 'client_cuisine_international',
+#    'maid_household_refuses_baby', 'maid_household_refuses_many_kids',
+#    'maid_pet_refuses_cat', 'maid_pet_refuses_dog',
+#    'maid_dayoff_refuses_fixed_sunday',
+#    'maid_living_requires_private_room', 'maid_living_refuses_abu_dhabi',
+#    'maidpref_edu_school', 'maidpref_edu_university',
+#    'maidpref_kids_exp_lessthan2', 'maidpref_kids_exp_above2',
+#    'maidpref_pet_cats', 'maidpref_pet_dogs',
+#    'maidpref_pers_energetic', 'maidpref_pers_no_attitude',
+#    'maidpref_pers_no_tiktok', 'maidpref_pers_veg_friendly',
+#    'maidpref_travel_travel', 'maidpref_travel_relocate',
+#    'maidpref_non_smoker',
+#    'maidpref_care_elderly_experienced', 'maidpref_care_special_needs'
+# ]
 
 # ------------------------------
 # Page Config
@@ -389,129 +389,129 @@ def calculate_score(row):
     final_score = min(base_score + bonus, 100)
     return round(final_score, 1), theme_scores, bonus_reasons
 
-def encode_row(client, maid):
-    """Recreate the exact encoded feature row used in training."""
+# def encode_row(client, maid):
+#     """Recreate the exact encoded feature row used in training."""
     
-    row = {}
+#     row = {}
 
-    # ----- BASIC NUMERIC -----
-    row['cc_type'] = 0  # always live-out unless you want UI support later
-    row['years_of_experience'] = maid.get('years_of_experience', 0)
-    row['total_complaints'] = maid.get('total_complaints', 0)
+#     # ----- BASIC NUMERIC -----
+#     row['cc_type'] = 0  # always live-out unless you want UI support later
+#     row['years_of_experience'] = maid.get('years_of_experience', 0)
+#     row['total_complaints'] = maid.get('total_complaints', 0)
     
-    # ----- LANGUAGE FLAGS -----
-    for lang in ['maidspeaks_amharic','maidspeaks_arabic','maidspeaks_english',
-                 'maidspeaks_french','maidspeaks_oromo']:
-        row[lang] = maid.get(lang, 0)
+#     # ----- LANGUAGE FLAGS -----
+#     for lang in ['maidspeaks_amharic','maidspeaks_arabic','maidspeaks_english',
+#                  'maidspeaks_french','maidspeaks_oromo']:
+#         row[lang] = maid.get(lang, 0)
 
-    row['num_languages'] = sum([
-        maid.get('maidspeaks_amharic',0),
-        maid.get('maidspeaks_arabic',0),
-        maid.get('maidspeaks_english',0),
-        maid.get('maidspeaks_french',0),
-        maid.get('maidspeaks_oromo',0)
-    ])
+#     row['num_languages'] = sum([
+#         maid.get('maidspeaks_amharic',0),
+#         maid.get('maidspeaks_arabic',0),
+#         maid.get('maidspeaks_english',0),
+#         maid.get('maidspeaks_french',0),
+#         maid.get('maidspeaks_oromo',0)
+#     ])
     
-    # ----- MAID NATIONALITY -----
-    nat = str(maid.get('maid_grouped_nationality','filipina')).lower()
-    row['maid_nat_ethiopian'] = int(nat=='ethiopian')
-    row['maid_nat_indian'] = int(nat=='indian')
-    row['maid_nat_west_african'] = int(nat=='west_african')
+#     # ----- MAID NATIONALITY -----
+#     nat = str(maid.get('maid_grouped_nationality','filipina')).lower()
+#     row['maid_nat_ethiopian'] = int(nat=='ethiopian')
+#     row['maid_nat_indian'] = int(nat=='indian')
+#     row['maid_nat_west_african'] = int(nat=='west_african')
 
-    # ----- COOKING -----
-    for col in ['maid_cooking_khaleeji','maid_cooking_lebanese',
-                'maid_cooking_international','maid_cooking_not_specified']:
-        row[col] = maid.get(col,0)
+#     # ----- COOKING -----
+#     for col in ['maid_cooking_khaleeji','maid_cooking_lebanese',
+#                 'maid_cooking_international','maid_cooking_not_specified']:
+#         row[col] = maid.get(col,0)
 
-    # ----- CLIENT: household -----
-    house = str(client['clientmts_household_type']).lower()
-    row['client_household_baby'] = int('baby' in house)
-    row['client_household_many_kids'] = int('many_kids' in house)
+#     # ----- CLIENT: household -----
+#     house = str(client['clientmts_household_type']).lower()
+#     row['client_household_baby'] = int('baby' in house)
+#     row['client_household_many_kids'] = int('many_kids' in house)
 
-    # ----- CLIENT: special cases -----
-    spec = str(client['clientmts_special_cases']).lower()
-    row['client_special_elderly'] = int('elderly' in spec)
-    row['client_special_special_needs'] = int('special' in spec)
+#     # ----- CLIENT: special cases -----
+#     spec = str(client['clientmts_special_cases']).lower()
+#     row['client_special_elderly'] = int('elderly' in spec)
+#     row['client_special_special_needs'] = int('special' in spec)
 
-    # ----- CLIENT: pets -----
-    pet = str(client['clientmts_pet_type']).lower()
-    row['client_pet_cat'] = int('cat' in pet)
-    row['client_pet_dog'] = int('dog' in pet)
+#     # ----- CLIENT: pets -----
+#     pet = str(client['clientmts_pet_type']).lower()
+#     row['client_pet_cat'] = int('cat' in pet)
+#     row['client_pet_dog'] = int('dog' in pet)
 
-    # ----- CLIENT: dayoff -----
-    # Always neutral for UI, but required for model
-    row['client_dayoff_flexible'] = 0
-    row['client_dayoff_work_for_pay'] = 0
-    row['client_dayoff_stay_home_for_pay'] = 0
+#     # ----- CLIENT: dayoff -----
+#     # Always neutral for UI, but required for model
+#     row['client_dayoff_flexible'] = 0
+#     row['client_dayoff_work_for_pay'] = 0
+#     row['client_dayoff_stay_home_for_pay'] = 0
 
-    # ----- CLIENT: nationality preference -----
-    nat_pref = str(client['clientmts_nationality_preference']).lower()
-    row['clientpref_filipina'] = int('filipina' in nat_pref)
-    row['clientpref_ethiopian_maid'] = int('ethiopian' in nat_pref)
-    row['clientpref_west_african_nationality'] = int('west african' in nat_pref)
-    row['clientpref_indian'] = int('indian' in nat_pref)
+#     # ----- CLIENT: nationality preference -----
+#     nat_pref = str(client['clientmts_nationality_preference']).lower()
+#     row['clientpref_filipina'] = int('filipina' in nat_pref)
+#     row['clientpref_ethiopian_maid'] = int('ethiopian' in nat_pref)
+#     row['clientpref_west_african_nationality'] = int('west african' in nat_pref)
+#     row['clientpref_indian'] = int('indian' in nat_pref)
 
-    # ----- CLIENT: living arrangement -----
-    liv = str(client['clientmts_living_arrangement']).lower()
-    row['client_living_private_room'] = int('private_room' in liv)
-    row['client_living_live_out'] = int('live_out' in liv)
-    row['client_living_abu_dhabi'] = int('abu_dhabi' in liv)
+#     # ----- CLIENT: living arrangement -----
+#     liv = str(client['clientmts_living_arrangement']).lower()
+#     row['client_living_private_room'] = int('private_room' in liv)
+#     row['client_living_live_out'] = int('live_out' in liv)
+#     row['client_living_abu_dhabi'] = int('abu_dhabi' in liv)
 
-    # ----- CLIENT: cuisine -----
-    cui = str(client['clientmts_cuisine_preference']).lower()
-    row['client_cuisine_lebanese'] = int('lebanese' in cui)
-    row['client_cuisine_khaleeji'] = int('khaleeji' in cui)
-    row['client_cuisine_international'] = int('international' in cui)
+#     # ----- CLIENT: cuisine -----
+#     cui = str(client['clientmts_cuisine_preference']).lower()
+#     row['client_cuisine_lebanese'] = int('lebanese' in cui)
+#     row['client_cuisine_khaleeji'] = int('khaleeji' in cui)
+#     row['client_cuisine_international'] = int('international' in cui)
 
-    # ----- MAID RESTRICTIONS -----
-    mh = str(maid.get('maidmts_household_type','')).lower()
-    row['maid_household_refuses_baby'] = int('refuses_baby' in mh)
-    row['maid_household_refuses_many_kids'] = int('refuses_many_kids' in mh)
+#     # ----- MAID RESTRICTIONS -----
+#     mh = str(maid.get('maidmts_household_type','')).lower()
+#     row['maid_household_refuses_baby'] = int('refuses_baby' in mh)
+#     row['maid_household_refuses_many_kids'] = int('refuses_many_kids' in mh)
 
-    mp = str(maid.get('maidmts_pet_type','')).lower()
-    row['maid_pet_refuses_cat'] = int('cat' in mp)
-    row['maid_pet_refuses_dog'] = int('dog' in mp)
+#     mp = str(maid.get('maidmts_pet_type','')).lower()
+#     row['maid_pet_refuses_cat'] = int('cat' in mp)
+#     row['maid_pet_refuses_dog'] = int('dog' in mp)
 
-    row['maid_dayoff_refuses_fixed_sunday'] = int(
-        maid.get('maidmts_dayoff_policy','') == 'refuses_fixed_sunday'
-    )
+#     row['maid_dayoff_refuses_fixed_sunday'] = int(
+#         maid.get('maidmts_dayoff_policy','') == 'refuses_fixed_sunday'
+#     )
 
-    ml = str(maid.get('maidmts_living_arrangement','')).lower()
-    row['maid_living_requires_private_room'] = int('requires_private_room' in ml)
-    row['maid_living_refuses_abu_dhabi'] = int('refuses_abu_dhabi' in ml)
+#     ml = str(maid.get('maidmts_living_arrangement','')).lower()
+#     row['maid_living_requires_private_room'] = int('requires_private_room' in ml)
+#     row['maid_living_refuses_abu_dhabi'] = int('refuses_abu_dhabi' in ml)
 
-    # ----- MAID PREFS -----
-    edu = str(maid.get('maidpref_education','')).lower()
-    row['maidpref_edu_school'] = int('school' in edu)
-    row['maidpref_edu_university'] = int('university' in edu)
+#     # ----- MAID PREFS -----
+#     edu = str(maid.get('maidpref_education','')).lower()
+#     row['maidpref_edu_school'] = int('school' in edu)
+#     row['maidpref_edu_university'] = int('university' in edu)
 
-    kexp = str(maid.get('maidpref_kids_experience','')).lower()
-    row['maidpref_kids_exp_lessthan2'] = int('lessthan2' in kexp)
-    row['maidpref_kids_exp_above2'] = int('above2' in kexp)
+#     kexp = str(maid.get('maidpref_kids_experience','')).lower()
+#     row['maidpref_kids_exp_lessthan2'] = int('lessthan2' in kexp)
+#     row['maidpref_kids_exp_above2'] = int('above2' in kexp)
 
-    pet2 = str(maid.get('maidpref_pet_handling','')).lower()
-    row['maidpref_pet_cats'] = int('cats' in pet2)
-    row['maidpref_pet_dogs'] = int('dogs' in pet2)
+#     pet2 = str(maid.get('maidpref_pet_handling','')).lower()
+#     row['maidpref_pet_cats'] = int('cats' in pet2)
+#     row['maidpref_pet_dogs'] = int('dogs' in pet2)
 
-    pers = str(maid.get('maidpref_personality','')).lower()
-    row['maidpref_pers_energetic'] = int('energetic' in pers)
-    row['maidpref_pers_no_attitude'] = int('no_attitude' in pers)
-    row['maidpref_pers_no_tiktok'] = int('no_tiktok' in pers)
-    row['maidpref_pers_veg_friendly'] = int('veg_friendly' in pers)
+#     pers = str(maid.get('maidpref_personality','')).lower()
+#     row['maidpref_pers_energetic'] = int('energetic' in pers)
+#     row['maidpref_pers_no_attitude'] = int('no_attitude' in pers)
+#     row['maidpref_pers_no_tiktok'] = int('no_tiktok' in pers)
+#     row['maidpref_pers_veg_friendly'] = int('veg_friendly' in pers)
 
-    trav = str(maid.get('maidpref_travel','')).lower()
-    row['maidpref_travel_travel'] = int('travel' in trav)
-    row['maidpref_travel_relocate'] = int('relocate' in trav)
+#     trav = str(maid.get('maidpref_travel','')).lower()
+#     row['maidpref_travel_travel'] = int('travel' in trav)
+#     row['maidpref_travel_relocate'] = int('relocate' in trav)
 
-    row['maidpref_non_smoker'] = int(
-        maid.get('maidpref_smoking','unspecified') == 'non_smoker'
-    )
+#     row['maidpref_non_smoker'] = int(
+#         maid.get('maidpref_smoking','unspecified') == 'non_smoker'
+#     )
 
-    care = str(maid.get('maidpref_caregiving_profile','')).lower()
-    row['maidpref_care_elderly_experienced'] = int('elderly' in care)
-    row['maidpref_care_special_needs'] = int('special' in care)
+#     care = str(maid.get('maidpref_caregiving_profile','')).lower()
+#     row['maidpref_care_elderly_experienced'] = int('elderly' in care)
+#     row['maidpref_care_special_needs'] = int('special' in care)
 
-    return row
+#     return row
 
 # -------------------------------
 # STREAMLIT APP
