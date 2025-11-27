@@ -332,12 +332,12 @@ def calculate_score(row):
         return 0, "Neutral", theme_scores, []
     # ---------------- PRIORITY-BASED AGGREGATION ----------------
     importance_weights = {
-        "Special Cases Reason": 6,   # highest importance
-        "Household & Kids Reason": 5,
-        "Living Reason": 4,
-        "Pets Reason": 3,
-        "Cuisine Reason": 2,
-        "Nationality Reason": 1      # lowest importance
+        "Special Cases Reason": 10,   # highest importance
+        "Household & Kids Reason": 9,
+        "Living Reason": 9,
+        "Pets Reason": 8,
+        "Cuisine Reason": 6,
+        "Nationality Reason": 8      # lowest importance
     }
     
     weighted_sum = 0
